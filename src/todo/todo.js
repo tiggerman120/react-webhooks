@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TodoForm from './form.js';
 import TodoList from './list.js';
 
-//import './todo.scss';
+import './todo.scss';
 
 function ToDo(props) {
   const [list, setList] = useState([])
