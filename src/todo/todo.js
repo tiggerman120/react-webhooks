@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import TodoForm from './form.js';
-import TodoList from './list.js';
+import TodoForm from '../form/form.js';
+import TodoList from '../list/list.js';
 
 import './todo.scss';
 
 function ToDo(props) {
   const [list, setList] = useState([])
-  console.log(list);
+  
   const addItem = (item) => {
     item._id = Math.random();
     item.complete = false;
+    console.log(item);
     setList([...list, item]);
   };
 
