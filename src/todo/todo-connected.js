@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import TodoForm from './form.js';
-import TodoList from './list.js';
-
+import TodoForm from '../form/form.js';
+import TodoList from '../list/list.js';
+import Button from 'react-bootstrap/Button';
 import './todo.scss';
 
 const todoAPI = 'https://api-js401.herokuapp.com/api/v1/todo';
@@ -27,8 +27,10 @@ const ToDo = () => {
       .catch(console.error);
   };
 
-  const _toggleComplete = id => {
 
+
+  const _toggleComplete = id => {
+console.log(id);
     let item = list.filter(i => i._id === id)[0] || {};
 
     if (item._id) {
@@ -52,18 +54,46 @@ const ToDo = () => {
     }
   };
 
-  const _getTodoItems = () => {
-    fetch(todoAPI, {
-      method: 'get',
-      mode: 'cors',
-    })
-      .then(data => data.json())
-      .then(data => setList(data.results))
+  // const _getTodoItems = () => {
+  //   fetch(todoAPI, {
+  //     method: 'get',
+  //     mode: 'cors',
+  //   })
+  //     .then(data => data.json())
+  //     .then(data => setList(data.results))
+  //     .catch(console.error);
+  // };
+
+  // useEffect(_getTodoItems, []);
+console.log(list);
+
+  const deleteOne = id => {
+    
+    let item = list.filter(i => i._id === id)[0] || {};
+    if (item._id) {
+      
+      item.complete = !item.complete;
+    
+      let url = `${todoAPI}/${id}`;
+      
+      fetch(url, {
+        method: 'delete',
+        mode: 'cors',
+        cache: 'no-cache',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(item)
+      })
+      .then(savedItem => {
+        console.log(list);
+        let mappedList = list.filter(listItem => listItem._id !== item._id)
+        console.log(mappedList)
+        setList(mappedList);
+      })
       .catch(console.error);
+    }
   };
-
-  useEffect(_getTodoItems, []);
-
+  
+  
   return (
     <>
       <header>
@@ -81,12 +111,15 @@ const ToDo = () => {
         <div>
           <TodoList
             list={list}
+
             handleComplete={_toggleComplete}
+            deleteOne={deleteOne}
           />
         </div>
       </section>
     </>
   );
+
 };
 
 export default ToDo;
