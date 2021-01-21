@@ -3,10 +3,12 @@ import { ListGroup, Container } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 
 function TodoList (props) {
+  console.log(props)
   return (
     <Container>
       <ListGroup>
         {props.list.map(item => (
+        
           <ListGroup.Item
           //variant={item.complete ? 'success' : 'danger'}
           className={`complete-${item.complete.toString()}`}
@@ -14,7 +16,6 @@ function TodoList (props) {
           
           >
             <span onClick={() => props.handleComplete(item._id)}>
-              {console.log(item)}
               Task: {item.text} {<br />}
               Assigned To: {item.assignee}
               {<br />}{<br />}
