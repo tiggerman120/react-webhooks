@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ListGroup, Container } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 
+
 function TodoList (props) {
-  console.log(props)
+  useEffect(() => {
+  }, [props])
   return (
     <Container>
       <ListGroup>

@@ -14,66 +14,78 @@ const todoAPI = 'https://api-js401.herokuapp.com/api/v1/todo';
 const ToDo = () => {
 
   const [list, setList] = useState([]);
+  const [count, setCount] = useState(0)
   const { data, request } = useAjax()
 
-  useEffect(() => {
-    //if()
-  })
+
+
+
+
   const _addItem = async (item) => {
     const options = {
-    // item.due = new Date();
-    // await fetch(todoAPI, {
       method: 'post',
       url: todoAPI,
       data: item,
-      // mode: 'cors',
-      // cache: 'no-cache',
-      // headers: { 'Content-Type': 'application/json' },
-      // body: JSON.stringify(item)
     }
-    useAjax(options)
-      // .then(response => response.json())
-      // .then(savedItem => {
-      //   setList([...list, savedItem])
-
-      
-      .then(console.log(list))
-      .catch(console.error);
-  };
-
-
-
-  const _toggleComplete = id => {
-    let item = list.filter(i => i._id === id)[0] || {};
-    // if (item._id) {
-      // item.complete = !item.complete;
-      let url = `${todoAPI}/${id}`;
-      const options = {
-      // fetch(url, {
-        method: 'put',
-        url: url,
-        data: { complete: !item.complete },
-        
-      }
-      const data = useAjax(options)
-      setList(data);
-        // .then(response => response.json())
-        // .then(savedItem => {
-        //   setList(list.map(listItem => listItem._id === item._id ? savedItem : listItem))
-  };
-
-  const _getTodoItems = useCallback(async () => {
+    request(options);
+    
+  }
+  
+  const _getTodoItems = () => {
     const options = {
       method: 'get',
       url: todoAPI,
     }
-    console.log(options);
-      const obj = request(options);
-      console.log(obj)
-      //setList({obj})
-  }, [request])
+    request(options);
+    setList(data);
+  };
+  
+  
+  
+  
+  useEffect(() => {
+     if (data.results) {
+      setList(data.results);
+    } else {
+      _getTodoItems();
+    }
+  }, [])
 
-  useEffect(_getTodoItems, [_getTodoItems]);
+
+  const _toggleComplete = id => {
+    let item = list.filter(i => i._id === id)[0] || {};
+    let url = `${todoAPI}/${id}`;
+    const options = {
+      method: 'put',
+      url: url,
+      data: { complete: !item.complete },
+    }
+    const data = useAjax(options)
+    setList(data);
+    
+  };
+
+
+
+
+
+
+
+
+  useEffect(() => {
+    if (list.length === 0) {
+      _getTodoItems();
+    }
+    setCount(list.filter(item => !item.complete).length);
+    document.title = `To Do List: (${count})`;
+  }, [data, list, count]);
+
+
+
+
+
+
+
 
   const deleteOne = async (id) => {
 
@@ -92,22 +104,17 @@ const ToDo = () => {
         body: JSON.stringify(item)
       })
         .then(savedItem => {
+          console.log(savedItem)
           _getTodoItems();
-          //let mappedList = list.filter(listItem => listItem._id !== item._id)
-          //console.log(mappedList)
-
-          //console.log(list);
+         
         })
         .catch(console.error);
     }
   };
-
-
   return (
     <>
       <header>
         <h2>
-          {console.log(list)}
           There are {list.filter(item => !item.complete).length} Items To Complete
         </h2>
       </header>
