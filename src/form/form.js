@@ -14,8 +14,6 @@ const [item, setItem] = useState('');
   const handleSubmit = (e) => {
     e.preventDefault();
     e.target.reset();
-    //let send =(item.text && item.difficulty && item.assignee) ? true : false;
-    //send && props.handleSubmit(item)
     props.handleSubmit(item);
     const newitem = {complete: false};
     console.log(`in handlesubmit ${item} ${newitem}`)
